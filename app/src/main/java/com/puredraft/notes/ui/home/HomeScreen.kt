@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.puredraft.notes.navigation.Screen
 import com.puredraft.notes.ui.components.NoteCard
 import com.puredraft.notes.ui.components.SkeletonLoader
 import com.puredraft.notes.theme.glassmorphism
@@ -42,7 +43,7 @@ fun HomeScreen(
         containerColor = MaterialTheme.colorScheme.background,
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* TODO Navigate to Editor */ },
+                onClick = { navController.navigate(Screen.Editor.createRoute(0L)) },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = Color.White,
                 shape = CircleShape
@@ -124,7 +125,7 @@ fun HomeScreen(
                     items(notes, key = { it.id }) { note ->
                         NoteCard(
                             note = note,
-                            onClick = { /* TODO Navigate to Editor */ }
+                            onClick = { navController.navigate(Screen.Editor.createRoute(note.id)) }
                         )
                     }
                 }
