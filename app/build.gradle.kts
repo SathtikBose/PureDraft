@@ -3,8 +3,8 @@ plugins {
   alias(libs.plugins.compose.compiler)
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.hilt)
+  alias(libs.plugins.ksp)
   id("org.jetbrains.kotlin.android")
-  id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -64,6 +64,7 @@ dependencies {
   implementation(libs.androidx.compose.ui)
   implementation(libs.androidx.compose.ui.tooling.preview)
   implementation(libs.androidx.compose.material3)
+  implementation(libs.androidx.compose.material.icons.extended)
   // Tooling
   debugImplementation(libs.androidx.compose.ui.tooling)
   // Instrumented tests
@@ -87,8 +88,13 @@ dependencies {
 
   // Hilt & Navigation
   implementation(libs.hilt.android)
-  "kapt"(libs.hilt.compiler)
+  ksp(libs.hilt.compiler)
   implementation(libs.hilt.navigation.compose)
+
+  // Room Database
+  implementation(libs.room.runtime)
+  implementation(libs.room.ktx)
+  ksp(libs.room.compiler)
 
   // Splashscreen
   implementation(libs.androidx.core.splashscreen)
