@@ -41,38 +41,9 @@ class HomeViewModel @Inject constructor(
         )
 
     init {
-        // Simulate a small delay to show the skeleton loader
         viewModelScope.launch {
-            delay(1500)
+            // Skeleton loader completes rapidly in production
             _isLoading.value = false
-            
-            // Mock Data For UI Verification
-            if (repository.getNoteById(1) == null) {
-                repository.insertNote(
-                    NoteEntity(
-                        title = "Welcome to PureDraft",
-                        content = "This is a premium glassmorphism notes app.",
-                        createdAt = System.currentTimeMillis(),
-                        updatedAt = System.currentTimeMillis(),
-                        isLocked = false,
-                        isPinned = true,
-                        noteColor = 0xFF1E1E1E.toInt(),
-                        formattingData = ""
-                    )
-                )
-                repository.insertNote(
-                    NoteEntity(
-                        title = "Secret Notes",
-                        content = "You shouldn't see this because it's locked.",
-                        createdAt = System.currentTimeMillis(),
-                        updatedAt = System.currentTimeMillis(),
-                        isLocked = true,
-                        isPinned = false,
-                        noteColor = 0xFF1E1E1E.toInt(),
-                        formattingData = ""
-                    )
-                )
-            }
         }
     }
 
