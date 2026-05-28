@@ -214,6 +214,9 @@ fun EditorScreen(
                     val text = contentState.text
                     val start = minOf(contentState.selection.start, contentState.selection.end)
                     val end = maxOf(contentState.selection.start, contentState.selection.end)
+                    
+                    if (start == end) return
+                    
                     val selectedText = text.substring(start, end)
                     
                     val newText = text.substring(0, start) + syntax + selectedText + syntax + text.substring(end)
@@ -229,6 +232,10 @@ fun EditorScreen(
                 fun insertPrefix(prefix: String) {
                     val text = contentState.text
                     val start = minOf(contentState.selection.start, contentState.selection.end)
+                    val end = maxOf(contentState.selection.start, contentState.selection.end)
+                    
+                    if (start == end) return
+                    
                     val newText = text.substring(0, start) + prefix + text.substring(start)
                     contentState = TextFieldValue(
                         text = newText,
