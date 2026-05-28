@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,23 +26,19 @@ class HomeViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
-    val notes: StateFlow<List<NoteEntity>> = combine(
-        repository.getAllNotes(),
-        _searchQuery
-    ) { allNotes, query ->
-        if (query.isBlank()) {
-            allNotes
-        } else {
-            allNotes.filter {
-                it.title.contains(query, ignoreCase = true) ||
-                it.content.contains(query, ignoreCase = true)
+    @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
+    val notes: StateFlow<List<NoteEntity>> = _searchQuery
+        .flatMapLatest { query ->
+            if (query.isBlank()) {
+                repository.getAllNotes()
+            } else {
+                repository.searchNotes(query)
             }
-        }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList()
-    )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
     init {
         // Simulate a small delay to show the skeleton loader
