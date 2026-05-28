@@ -23,10 +23,15 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import androidx.fragment.app.FragmentActivity
+import kotlinx.coroutines.launch
 import com.puredraft.notes.navigation.Screen
 import com.puredraft.notes.ui.components.NoteCard
 import com.puredraft.notes.ui.components.SkeletonLoader
 import com.puredraft.notes.theme.glassmorphism
+import com.puredraft.notes.utils.BiometricAuthenticator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,6 +42,9 @@ fun HomeScreen(
     val notes by viewModel.notes.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
     val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
+
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -125,7 +133,21 @@ fun HomeScreen(
                     items(notes, key = { it.id }) { note ->
                         NoteCard(
                             note = note,
-                            onClick = { navController.navigate(Screen.Editor.createRoute(note.id)) }
+                            onClick = { 
+                                if (note.isLocked) {
+                                    val activity = context as? FragmentActivity
+                                    if (activity != null) {
+                                        coroutineScope.launch {
+                                            val result = BiometricAuthenticator.authenticate(activity)
+                                            if (result is BiometricAuthenticator.Result.Success) {
+                                                navController.navigate(Screen.Editor.createRoute(note.id))
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    navController.navigate(Screen.Editor.createRoute(note.id)) 
+                                }
+                            }
                         )
                     }
                 }

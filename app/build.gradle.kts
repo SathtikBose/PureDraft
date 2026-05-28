@@ -99,6 +99,9 @@ dependencies {
   // DataStore
   implementation(libs.androidx.datastore.preferences)
 
+  // Biometric
+  implementation(libs.androidx.biometric)
+
   // Splashscreen
   implementation(libs.androidx.core.splashscreen)
 }
