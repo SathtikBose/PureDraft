@@ -50,4 +50,10 @@ class HomeViewModel @Inject constructor(
     fun onSearchQueryChanged(query: String) {
         _searchQuery.value = query
     }
+
+    fun deleteNote(note: NoteEntity) {
+        viewModelScope.launch {
+            repository.deleteNote(note)
+        }
+    }
 }

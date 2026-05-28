@@ -9,13 +9,22 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-fun Modifier.glassmorphism(): Modifier {
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.unit.Dp
+
+fun Modifier.glassmorphism(cornerRadius: Dp = 16.dp): Modifier {
     return this
-        .clip(RoundedCornerShape(16.dp))
+        .shadow(
+            elevation = 12.dp,
+            shape = RoundedCornerShape(cornerRadius),
+            ambientColor = Color.Black.copy(alpha = 0.8f),
+            spotColor = Color.Black.copy(alpha = 0.8f)
+        )
+        .clip(RoundedCornerShape(cornerRadius))
         .background(
             brush = Brush.linearGradient(
                 colors = listOf(
-                    Color.White.copy(alpha = 0.2f),
+                    Color.White.copy(alpha = 0.15f),
                     Color.White.copy(alpha = 0.05f)
                 )
             )
@@ -24,10 +33,10 @@ fun Modifier.glassmorphism(): Modifier {
             width = 1.dp,
             brush = Brush.linearGradient(
                 colors = listOf(
-                    Color.White.copy(alpha = 0.5f),
-                    Color.White.copy(alpha = 0.1f)
+                    Color.White.copy(alpha = 0.3f),
+                    Color.White.copy(alpha = 0.05f)
                 )
             ),
-            shape = RoundedCornerShape(16.dp)
+            shape = RoundedCornerShape(cornerRadius)
         )
 }
